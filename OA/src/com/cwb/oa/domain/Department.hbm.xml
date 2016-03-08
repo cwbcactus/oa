@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.cwb.oa.domain">
+
+	<class name="Department" table="itcast_department">
+		<id name="id">
+            <generator class="native"/>
+		</id>
+		
+		<property name="name" column="name"></property>
+		<property name="description" column="description"></property>
+		
+		<many-to-one name="parent" column="parentId" class="Department"></many-to-one>
+		
+		<set name="users">
+			<key column="departmentId"></key>
+			<one-to-many class="User"/>
+		</set>
+		
+		<set name="children" cascade="delete">
+			<key column="parentId"></key>
+			<one-to-many class="Department"/>
+		</set>
+		
+	</class>
+	
+</hibernate-mapping>

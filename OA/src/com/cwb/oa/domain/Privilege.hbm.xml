@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.cwb.oa.domain">
+
+	<class name="Privilege" table="itcast_privilege">
+		<id name="id">
+            <generator class="native"/>
+		</id>
+		
+		<property name="url" column="url"></property>
+		<property name="name" column="name"></property>
+		
+		<many-to-one name="parent" class="Privilege" column="parentId"></many-to-one>
+		
+		<!-- 
+			order-by:
+				 前台页面显示权限的时候，每次刷新会导致次序不一样。
+				 设置order-by="id"会默认按照id的升序次序显示
+		 -->
+		<set name="children" order-by="id" lazy="false">
+			<key column="parentId"></key>
+			<one-to-many class="Privilege"/>
+		</set>
+		
+		<set name="roles" table="itcast_role_privilege" lazy="false">
+			<key column="privilegeId"></key>
+			<many-to-many class="Role" column="roleId"></many-to-many>
+		</set>
+	</class>
+	
+</hibernate-mapping>

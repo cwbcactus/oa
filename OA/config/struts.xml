@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<!-- 配置为开发模式 -->
+    <constant name="struts.devMode" value="true" />
+    <!-- 把action扩展名改为.do -->
+    <constant name="struts.action.extension" value="do" />
+    <!-- 把主题设为simple -->
+    <constant name="struts.ui.theme" value="simple" />
+	
+    <package name="default" namespace="/" extends="struts-default">
+    
+    	<interceptors>
+    		<interceptor name="checkPrivilegeInterceptor" class="com.cwb.oa.interceptor.CheckPrivilegeInterceptor"></interceptor>
+    		<interceptor-stack name="myDefaultStack">
+    			<interceptor-ref name="checkPrivilegeInterceptor"></interceptor-ref>
+	    		<interceptor-ref name="defaultStack"></interceptor-ref>
+    		</interceptor-stack>
+    	</interceptors>
+    	
+    	<default-interceptor-ref name="myDefaultStack"></default-interceptor-ref>
+    	
+    	<!-- 配置全局的Result -->
+    	<global-results>
+    		<result name="loginUI">/WEB-INF/jsp/loginoutAction/loginUI.jsp</result>
+    		<result name="noPrivilegeUI">/noPrivilegeUI.jsp</result>
+    	</global-results>
+    	
+    	<!-- 配置角色 -->
+    	<action name="roleAction_*" class="roleAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/roleAction/list.jsp</result>
+    		<result name="toList" type="redirectAction">roleAction_list</result>
+    		<result name="setPrivilegeUI">/WEB-INF/jsp/roleAction/setPrivilegeUI.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/roleAction/saveUI.jsp</result>
+    	</action>
+    	
+    	<!-- 配置岗位 -->
+    	<action name="departmentAction_*" class="departmentAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/departmentAction/list.jsp</result>
+    		<result name="toList" type="redirectAction">departmentAction_list?parentId=${parentId}</result>
+    		<!-- 
+    		<result name="addUI">/WEB-INF/jsp/roleAction/addUI.jsp</result>
+    		<result name="editUI">/WEB-INF/jsp/roleAction/editUI.jsp</result>
+    		 -->
+    		<result name="saveUI">/WEB-INF/jsp/departmentAction/saveUI.jsp</result>
+    	</action>
+    	
+    	<!-- 配置用户 -->
+    	<action name="userAction_*" class="userAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/userAction/list.jsp</result>
+    		<result name="toList" type="redirectAction">userAction_list</result>
+    		<!-- 
+    		<result name="addUI">/WEB-INF/jsp/roleAction/addUI.jsp</result>
+    		<result name="editUI">/WEB-INF/jsp/roleAction/editUI.jsp</result>
+    		 -->
+    		<result name="saveUI">/WEB-INF/jsp/userAction/saveUI.jsp</result>
+    	</action>
+    	
+    	<!-- 配置登录登出 -->
+    	<action name="loginoutAction_*" class="loginoutAction" method="{1}">
+    		<result name="logout">/WEB-INF/jsp/loginoutAction/logout.jsp</result>
+    		<result name="toHome">/WEB-INF/jsp/homeAction/index.jsp</result>
+    	</action>
+    	
+    	<!-- 配置主页 -->
+    	<action name="homeAction_*" class="homeAction" method="{1}">
+    		<result name="{1}">/WEB-INF/jsp/homeAction/{1}.jsp</result>
+    	</action>
+    	
+    	<!-- 配置论坛管理 -->
+    	<action name="forumManage_*" class="forumManageAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/forumManageAction/list.jsp</result>
+    		<result name="toList" type="redirectAction">forumManage_list</result>
+    		<result name="saveUI">/WEB-INF/jsp/forumManageAction/saveUI.jsp</result>
+    	</action>
+    	
+    	<!-- 配置论坛 -->
+    	<action name="forum_*" class="forumAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/forumAction/list.jsp</result>
+    		<result name="show">/WEB-INF/jsp/forumAction/show.jsp</result>
+    	</action>
+    	
+    	<!-- 配置主题 -->
+    	<action name="topic_*" class="topicAction" method="{1}">
+    		<result name="show">/WEB-INF/jsp/topicAction/show.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/topicAction/saveUI.jsp</result>
+    		<result name="toShow" type="redirectAction">topic_show?id=${#topicId}</result>
+    	</action>
+    	
+    	<!-- 配置回复 -->
+    	<action name="reply_*" class="replyAction" method="{1}">
+    		<result name="saveUI">/WEB-INF/jsp/replyAction/saveUI.jsp</result>
+    		<result name="toTopicShow" type="redirectAction">topic_show?id=${topicId}</result>
+    	</action>
+    	
+    </package>
+
+</struts>
