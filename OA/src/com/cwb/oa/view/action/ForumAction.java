@@ -1,6 +1,5 @@
 package com.cwb.oa.view.action;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.context.annotation.Scope;
@@ -8,7 +7,6 @@ import org.springframework.stereotype.Controller;
 
 import com.cwb.oa.base.BaseAction;
 import com.cwb.oa.domain.Forum;
-import com.cwb.oa.domain.PageBean;
 import com.cwb.oa.domain.Topic;
 import com.cwb.oa.util.QueryHelper;
 import com.opensymphony.xwork2.ActionContext;
@@ -123,10 +121,12 @@ public class ForumAction extends BaseAction<Forum> {
 //		ActionContext.getContext().getValueStack().push(pageBean);
 		
 		//分页 version4 构建hql语句
+		Forum forum = forumService.getById(model.getId());
 		new QueryHelper(Topic.class, "t")//
-			.addWhereCondition((viewType == 1), " t.type=? ", Topic.TYPE_BEST)
-			.addOrderByProperty((orderBy == 1), "", true);
-		
+			.addWhereCondition("t.forum", forum)
+			.addWhereCondition((viewType == 1), "t.type=?", Topic.TYPE_BEST)
+			.addOrderByProperty((orderBy == 1), "t.lastUpdateTime", true);
+			
 		
 		return "show";
 	}
